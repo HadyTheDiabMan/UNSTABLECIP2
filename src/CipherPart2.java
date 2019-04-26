@@ -13,7 +13,7 @@ public class CipherPart2
 		String fileName;
 		boolean encrypt; //(true=encrypt, false=decrypt)
 		int shiftAmount;
-		
+		String encryptedstring;
 		System.out.println("Would you like to encrypt or decrypt a file?: ");
 		String encordec= scan.nextLine();
 		
@@ -25,10 +25,23 @@ public class CipherPart2
 			
 		}
 		if (encordec.equals("encrypt") || encordec.equals("Encrypt")) 
+		{
 			encrypt=true;
-		else
+			
+		}
+		else if(encordec.equals("decrypt")|| encordec.equals("Decrypt"))
+		{
 			encrypt=false;
-		
+		}
+		else
+		{
+			while((!encordec.equals("encrypt"))&&(!encordec.equals("Encrypt"))
+					&& (!encordec.equals("decrypt")) && (!encordec.equals("Decrypt")))
+			{
+				System.out.println("Invalid.  Please re-enter if you want to"
+						+ " encrypt or decrypt: ");
+		}
+		}
 		System.out.println("How many places should the alphabet be shifted?");
 		
 		shiftAmount= scan.nextInt();
@@ -38,30 +51,33 @@ public class CipherPart2
 			shiftAmount= scan.nextInt();
 		}
 		
-		scan.next();
+		scan.nextLine();
 		
 		if(encrypt=true)
 		{
 		System.out.println("Please enter in a filename to encrypt: ");
 		
 		fileName= scan.nextLine();
+		String partOfFile= fileName.substring(0, fileName.length()-4);
 		caesar_cipher(fileName,encrypt, shiftAmount);
+		System.out.println("Result written to "+partOfFile+"_ENC.txt");
+		System.out.println(caesar_cipher(fileName,encrypt, shiftAmount));
+		
 		}
 		
-		else
+		if(encrypt=false)
 		{
 		System.out.println("Please enter in a filename to decrypt: ");
 		fileName= scan.nextLine();
+		String partOfFile= fileName.substring(0, fileName.length()-4);
+		caesar_cipher(fileName,encrypt, shiftAmount);
+		System.out.println("Result written to "+partOfFile+"_DEC.txt");
+		System.out.println(caesar_cipher(fileName,encrypt, shiftAmount));
+		
 		}
 		
 		
-		
-		
-		
-		
-		
-
-		
+	
 		
 
 	}
@@ -72,7 +88,8 @@ public class CipherPart2
 	public static String caesar_cipher(String fileName, boolean encrypt,
 						int shiftAmount)  throws IOException
 	{
-		String TheEncryptedFile = "";
+		String encryptedstring="";
+		String decryptedstring="";
 		if(encrypt=true)
 		{
 			Scanner inputFile= new Scanner(new File(fileName)); 
@@ -133,20 +150,102 @@ public class CipherPart2
 						}
 						
 						outputfile.print(encryptchar);
+						encryptedstring=encryptedstring+encryptchar;
+						
 					}
+					
 					outputfile.println("");
-					 
+					
+					outputfile.close();
+					inputFile.close();
+					
+					return encryptedstring;
+					
+					
+				}
+		}
+				if(encrypt=false)
+				{
+					Scanner inputfileDEC= new Scanner(new File(fileName)); 
+					
+					String partOfFileDEC= fileName.substring(0, fileName.length()-4);
+					PrintWriter outputfileDEC= new PrintWriter(partOfFileDEC+"_DEC.txt");
+					
+					while (inputfileDEC.hasNext())
+
+						
+					{ 
+
+					String line = inputfileDEC.nextLine(); 
+					char[] linechars= new char[line.length()];
+					
+					for(int h=0; h<line.length();h++)
+					{
+						linechars[h]= line.charAt(h);
+					}
+					
+					for(int i=0; i<line.length();i++)
+					{
+						
+						char regularchar=linechars[i];
+						char decryptchar= (char) (regularchar+((shiftAmount%regularchar)));
+						if(regularchar==97)
+						{
+							decryptchar='x';
+						}
+						if(regularchar==98)
+						{
+							decryptchar='y';
+						}
+						if(regularchar==99)
+						{
+							decryptchar='z';
+						}
+						if(regularchar==65)
+						{
+							decryptchar='X';
+						}
+						if(regularchar==66)
+						{
+							decryptchar='Y';
+						}
+						if(regularchar==67)
+						{
+							decryptchar='Z';
+						}
+						if(decryptchar<65)
+						{
+							decryptchar=regularchar;
+						}
+						if(decryptchar>122 && decryptchar<97&&decryptchar>90)
+						{
+							decryptchar=regularchar;
+						}
+						
+						outputfileDEC.print(decryptchar);
+						decryptedstring=decryptedstring+decryptchar;
+						
+					}
+					
+					outputfileDEC.println("");
+					
 					
 					
 				}
 				
-				
-			String theEncryptedFilemethod= "Result written to "+partOfFile+"_ENC.txt";
-			TheEncryptedFile=theEncryptedFilemethod;
-			outputfile.close();
-			inputFile.close();
-			return TheEncryptedFile;
-
+					outputfileDEC.close();
+					inputfileDEC.close();
+					
+					return decryptedstring;
+		}
+		
+		if(encrypt=false)
+		{
+			return decryptedstring;
+		}
+		else
+		{
+			return encryptedstring;
 		}
 		
 		
@@ -154,3 +253,4 @@ public class CipherPart2
 		
 	}
 }
+
