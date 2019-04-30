@@ -11,19 +11,12 @@ public class CipherPart2
 		
 		Scanner scan= new Scanner(System.in);
 		String fileName;
-		boolean encrypt; //(true=encrypt, false=decrypt)
+		boolean encrypt = true; //(true=encrypt, false=decrypt)
 		int shiftAmount;
 		String encryptedstring;
 		System.out.println("Would you like to encrypt or decrypt a file?: ");
 		String encordec= scan.nextLine();
 		
-		while((!encordec.equals("encrypt"))&&(!encordec.equals("Encrypt"))
-				&& (!encordec.equals("decrypt")) && (!encordec.equals("Decrypt")))
-		{
-			System.out.println("Invalid.  Please re-enter if you want to"
-					+ " encrypt or decrypt: ");
-			
-		}
 		if (encordec.equals("encrypt") || encordec.equals("Encrypt")) 
 		{
 			encrypt=true;
@@ -33,23 +26,11 @@ public class CipherPart2
 		{
 			encrypt=false;
 		}
-		else
-		{
-			while((!encordec.equals("encrypt"))&&(!encordec.equals("Encrypt"))
-					&& (!encordec.equals("decrypt")) && (!encordec.equals("Decrypt")))
-			{
-				System.out.println("Invalid.  Please re-enter if you want to"
-						+ " encrypt or decrypt: ");
-		}
-		}
+		
 		System.out.println("How many places should the alphabet be shifted?");
 		
 		shiftAmount= scan.nextInt();
-		while(shiftAmount < -26 || shiftAmount >26)
-		{
-			System.out.println("INVALID NUMBER. Please enter a valid number(0-26): ");
-			shiftAmount= scan.nextInt();
-		}
+		
 		
 		scan.nextLine();
 		
@@ -156,15 +137,16 @@ public class CipherPart2
 					
 					outputfile.println("");
 					
-					outputfile.close();
-					inputFile.close();
 					
-					return encryptedstring;
-					
-					
+			
 				}
+			
+			outputfile.close();
+			inputFile.close();
 		}
-				if(encrypt=false)
+		
+		
+				if(!encrypt)
 				{
 					Scanner inputfileDEC= new Scanner(new File(fileName)); 
 					
@@ -223,7 +205,7 @@ public class CipherPart2
 						}
 						
 						outputfileDEC.print(decryptchar);
-						decryptedstring=decryptedstring+decryptchar;
+						decryptedstring+=decryptchar;
 						
 					}
 					
@@ -236,7 +218,7 @@ public class CipherPart2
 					outputfileDEC.close();
 					inputfileDEC.close();
 					
-					return decryptedstring;
+					
 		}
 		
 		if(encrypt=false)
